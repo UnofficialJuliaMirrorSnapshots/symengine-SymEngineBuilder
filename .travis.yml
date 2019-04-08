@@ -1,0 +1,32 @@
+language: julia
+os:
+- linux
+julia:
+- 1.0
+notifications:
+  email: false
+git:
+  depth: 99999999
+cache:
+  timeout: 1000
+  directories:
+  - downloads
+env:
+  global:
+  - BINARYBUILDER_DOWNLOADS_CACHE=downloads
+  - BINARYBUILDER_AUTOMATIC_APPLE=true
+sudo: required
+before_script:
+- julia -e 'using Pkg; Pkg.add("BinaryBuilder"); Pkg.add("BinaryProvider")';
+script:
+- julia build_tarballs.jl
+deploy:
+  provider: releases
+  api_key:
+    secure: H+E4IWnXpKyu+7G6sfEI2LiSWyNRSRyg7RnvCwBlxqsYlDXBkad0xJAKmNujhhEMc1sbH93YYQ/7P1lt31QUTdO9XWxrNgLgLwNA68EnEXC6zgCchHsM0FxKaVCGB04sDAsV7T7do+ROl9pYEWrFaM6lOnW/imy3hUV7+LgJFFNdu8/7SGt0C5Wrvq7t89UmJBJaKBp7NpD/f2gaSvsvlIuxbnEEUAktqqyGp8JgtDUQ0Zje7FJzPzT21AHknudXVEHNhGUHLpeK8TPnoUkV/jzYTgGFeAL/38DLXbzYKXPGbYaiMX3VR9N8lIPuknVtx0higeMvUy2CKkuz8AHOaqUmuAZodugdJQCit74UlyXhVKsCL1JdJtaVNxiuHlFdfZW37kiwjs6AZPa0Hrx9QGpTZJOykLqiyJiYC8t1GBlFw+eumURqAbDJAkwmgB+X+lBBNjOCnlSQG8UDh1nIBI5m8xGaDXe7OETzZzWAhIO3Ec7abKDJQsWMo7apkjLCXiOXtwJw1gpjR6atEDFLLuiMuTWONvcbmVZfZgA9x0rJ9jdMmvxWXGJ3KFJJkQ+HL1+a6E893MstoOCiArjL9oxkLa/qnrth8MUx7G1PGQLhOKtQrqOCiWNfUghAJLlLOv2LKTMvAe1BAqeuppuu2dCigGD92L/5DpOxKSjP6Z8=
+  file_glob: true
+  file: products/*
+  skip_cleanup: true
+  on:
+    repo: symengine/SymEngineBuilder
+    tags: true
